@@ -10,17 +10,24 @@ const User = require('../models/User');
 router.get('/', authMiddleware, async (req, res) => {
   const user = req.user;
   try {
-    const forms = await Form.find({ isDeleted: false }).lean();
+    const forms = await Form.find({ isDeleted: false }).lean().select(['templateId', 'userId', 'createdDate', '_id', 'answers']);
     
     const sentForms = await Promise.all(
-      forms.map(async (form) => {
+      forms.map(async ({answers, ...form}) => {
         const [template, userDetails] = await Promise.all([
           Template.findById(form.templateId).lean(),
           User.findById(form.userId).lean(),
         ]);
 
+        const onTableVisibleQuestions = template.questions.filter(q => q.isVisibleInTable).map(q => ({
+          title: q.title,
+          _id: q._id,
+          answer: answers.find(a => a.questionId.toString() === q._id.toString())?.answer || '',
+        }))
+
         return {
           ...form,
+          onTableVisibleQuestions,
           user: `${userDetails?.name || ''} (${userDetails?.email || ''})`,
           templateTitle: template?.title || '',
           createdDate: formatDate(form?.createdDate),
