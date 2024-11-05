@@ -14,6 +14,7 @@ const topicRoutes = require('./routes/topics');
 const tagsRoutes = require('./routes/tags');
 const formsRoutes = require('./routes/forms');
 const searchRoutes = require('./routes/search');
+const salesforceRoutes = require('./routes/salesforce/index');
 
 const app = express();
 connectDB();
@@ -30,6 +31,7 @@ app.use('/api/topics', topicRoutes);
 app.use('/api/tags', tagsRoutes);
 app.use('/api/forms', formsRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/salesforce', salesforceRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

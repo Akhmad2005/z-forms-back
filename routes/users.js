@@ -97,4 +97,21 @@ router.patch('/edit', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/me', authMiddleware, async (req, res) => {
+  const { _id } = req.user;
+
+  try {
+    let user = await User.findById(_id).lean().select({ password: 0, isDeleted: 0});
+    let sentUser = {
+      ...user, 
+      registrationDate: formatDate(user.registrationDate), 
+      lastLoginDate: formatDate(user.lastLoginDate)
+    };
+    res.json(sentUser);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ message: 'Error fetching user', error });
+  }
+});
+
 module.exports = router;

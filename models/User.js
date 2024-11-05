@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
   registrationDate: { type: Date, default: Date.now },
   lastLoginDate: { type: Date },
   status: { type: String, enum: ['active', 'blocked'], default: 'active' },
-  isDeleted: { type: Boolean, default: false }
+  isDeleted: { type: Boolean, default: false },
+  salesforceAccountId: { type: String}
 });
 
 module.exports = mongoose.model('User', userSchema);
