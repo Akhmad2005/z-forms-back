@@ -20,7 +20,6 @@ const app = express();
 connectDB();
 
 app.use(cors({
-  origin: 'https://z-forms.vercel.app',
   credentials: true,
 }));
 app.use(bodyParser.json());
