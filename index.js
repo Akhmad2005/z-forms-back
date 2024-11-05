@@ -19,7 +19,10 @@ const salesforceRoutes = require('./routes/salesforce/index');
 const app = express();
 connectDB();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://z-forms.vercel.app',
+  credentials: true,
+}));
 app.use(bodyParser.json());
 
 app.use('/api/auth', authRoutes);
